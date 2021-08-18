@@ -1,0 +1,31 @@
+{
+  "name": "chemhover",
+  "version": "1.0.0",
+  "description": "This is a great package",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "targets": {
+    "webext-dev": {
+      "sourceMap": {
+        "inline": true,
+        "inlineSources": true
+      }
+    },
+    "webext-prod": {}
+  },
+  "scripts": {
+    "start": "parcel src/manifest.json --host localhost --target webext-dev",
+    "build": "parcel build src/manifest.json --target webext-prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/config-webextension": "^2.0.0-nightly.2425",
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "parcel": "^2.0.0-nightly.801"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "^3.8.0",
+    "smiles-drawer": "^1.2.0"
+  }
+}

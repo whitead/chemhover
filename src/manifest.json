@@ -1,0 +1,25 @@
+{
+    "manifest_version": 2,
+    "name": "Chemhover",
+    "description": "Identifies SMILES and enables hover to see structure",
+    "homepage_url": "https://github.com/whitead/chemhover",
+    "version": "1.0",
+    "icons": {
+        "48": "icons/icon.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "./replace.js"
+            ]
+        }
+    ],
+    "browser_action": {
+        "default_icon": {
+            "48": "icons/icon.png"
+        }
+    }
+}
