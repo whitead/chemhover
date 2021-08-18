@@ -3,7 +3,7 @@ import config from './model_info.json';
 
 const rnn_mod = {
     startLoad: () => {
-        const loader = tf.loadLayersModel('https://raw.githubusercontent.com/whitead/chemhover/main/static/model/model.json');
+        const loader = tf.loadLayersModel('https://raw.githubusercontent.com/whitead/chemhover/main/static/model/model-v1.json');
         return loader.then((model) => {
             rnn_mod.model = (t) => {
                 return model.predict(t);
