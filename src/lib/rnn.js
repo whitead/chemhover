@@ -1,36 +1,29 @@
-import * as tf from '@tensorflow/tfjs';
-import config from './model_info.json';
+const resolvers = {};
+let id = 0;
+const MAX_ID = 2 ** 10
 
-const rnn_mod = {
-    startLoad: () => {
-        const loader = tf.loadLayersModel('https://raw.githubusercontent.com/whitead/chemhover/main/static/model/model-v1.json');
-        return loader.then((model) => {
-            rnn_mod.model = (t) => {
-                return model.predict(t);
-            }
-            rnn_mod.resetStates = () => {
-                model.resetStates();
-            }
-        });
-    }
-};
-
-
-rnn_mod.tokenize = (str_list) => {
-    // convert
-    let result = [];
-    let largest = 0;
-    for (let i = 0; i < str_list.length; i++) {
-        result.push(str_list[i].split('').map((e, i) => {
-            parseInt(config.stoi[e] || 0);
-        }));
-        largest = Math.max(largest, result[i].length);
-    }
-    const buffer = tf.buffer([str_list.length, largest], 'int32');
-    for (let i = 0; i < str_list.length; i++)
-        for (let j = 0; j < result[i].length; j++)
-            buffer.set(i, j, result[i][j]);
-    return buffer.toTensor();
+if (typeof browser === "undefined") {
+    var browser = chrome;
 }
 
-export default rnn_mod;
+let port = browser.runtime.connect({ name: "rnn" });
+
+port.onMessage.addListener((data) => {
+    console.log('rnn got message' + data[2]);
+    const mid = data[1];
+    const result = data[2];
+    resolvers[mid](result);
+    delete resolvers[mid];
+});
+
+export function rnnPredict(s) {
+    id = (id + 1) % MAX_ID;
+    port.postMessage(['predict', id, s]);
+    return new Promise(resolve => resolvers[id] = resolve);
+}
+
+export function checkStatus() {
+    id = (id + 1) % MAX_ID;
+    port.postMessage(['loading-status', id, null]);
+    return new Promise(resolve => resolvers[id] = resolve);
+}

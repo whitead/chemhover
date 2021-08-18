@@ -3,9 +3,17 @@
  * all occurrences of each mapped word with its emoji counterpart.
  */
 
-import rnn_mod from "./lib/rnn";
+import { checkStatus, rnnPredict } from "./lib/rnn";
 
 
+const threshold = 1;
+
+function insertHTMLText(node, htmlText) {
+    let replacementNode = document.createElement('span');
+    replacementNode.innerHTML = htmlText;
+    node.parentNode.insertBefore(replacementNode, node);
+    node.parentNode.removeChild(node);
+}
 
 /**
  * Substitutes emojis into text nodes.
@@ -36,14 +44,26 @@ function replaceText(node) {
         // once, at the end.
         let content = node.textContent;
 
-        const ss = content.split();
-        const vec = rnn_mod.tokenize(ss);
-        const ps = rnn_mod.predict(vec);
+        const ss = content.split(/\s+/);
+        if (content.length > 0 && ss.length > 0) {
 
-        // Now that all the replacements are done, perform the DOM manipulation.
-        node.textContent = content;
+            rnnPredict(ss).then((ps) => {
+                if (ps) {
+                    console.log('hi this came for you', ps);
+                    for (let i = 0; i < ss.length; i++) {
+                        if (ss[i].length > 1 && ps[i] > threshold)
+                            content = content.replace(ss[i], '🟢<bold>' + ps[i] + '🟢' + ss[i] + '</bold>   🟢')
+                        else
+                            content = content.replace(ss[i], '<h1>' + ss[i] + '</h1>')
+                    }
+                    // Now that all the replacements are done, perform the DOM manipulation.
+                    insertHTMLText(node, content);
+                }
+            })
+        }
     }
-    else {
+    else if (node.tagName && node.tagName.toUpperCase() !== 'SCRIPT' && node.tagName.toUpperCase() !== 'STYLE') {
+        // skip scripts
         // This node contains more than just text, call replaceText() on each
         // of its children.
         for (let i = 0; i < node.childNodes.length; i++) {
@@ -70,14 +90,35 @@ const observer = new MutationObserver((mutations) => {
 });
 
 
-rnn_mod.startLoad().then(() => {
-    // Start the recursion from the body tag.
+var didbegin = false
+function begin() {
+    if (didbegin)
+        return;
+    didbegin = true;
     replaceText(document.body);
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
+    //observer.observe(document.body, {
+    //   childList: true,
+    //   subtree: true
+    //});
+}
+
+var count = 0
+function doCheck() {
+    count += 1
+    console.log('checking');
+    if (count > 100) {
+        console.log('Could not load RNN model. Giving up');
+        return;
+    }
+    checkStatus().then((v) => {
+        console.log('got result ' + v);
+        if (!v) {
+            setTimeout(doCheck, 100);
+        } else {
+            console.log('starting');
+            begin();
+        }
     });
+}
 
-})
-
-
+doCheck();

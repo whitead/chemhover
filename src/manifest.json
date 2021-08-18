@@ -17,9 +17,18 @@
             ]
         }
     ],
+    "background": {
+        "scripts": [
+            "lib/rnn-background.js"
+        ]
+    },
     "browser_action": {
         "default_icon": {
             "48": "icons/icon.png"
         }
-    }
+    },
+    "permissions": [
+        "*://raw.githubusercontent.com/*",
+        "webRequest"
+    ]
 }
