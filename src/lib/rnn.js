@@ -8,7 +8,7 @@ if (typeof browser === "undefined") {
 
 
 const rnn = {
-    model: null
+    loaded: null
 }
 
 function tokenize(str_list) {
@@ -33,10 +33,16 @@ function tokenize(str_list) {
 
 
 export async function rnnPredict(s) {
-    if (rnn.model === null) {
-        const model = await tf.loadLayersModel(config.url);
-        rnn.model = (t) => { return model.predict(t) };
+    if (rnn.loaded === null) {
+        rnn.loaded = new Promise((r) => {
+            tf.loadLayersModel(config.url).then((model) => {
+                console.log('Model loaded!');
+                rnn.model = (t) => { return model.predict(t) };
+                r(true);
+            })
+        })
     }
+    await rnn.loaded;
     const t = tokenize(s)
     if (t) {
         const result = rnn.model(t);
