@@ -1,29 +1,49 @@
-const resolvers = {};
-let id = 0;
-const MAX_ID = 2 ** 10
+import * as tf from '@tensorflow/tfjs';
+import config from './tiny-v1-info'
+
 
 if (typeof browser === "undefined") {
     var browser = chrome;
 }
 
-let port = browser.runtime.connect({ name: "rnn" });
 
-port.onMessage.addListener((data) => {
-    console.log('rnn got message' + data[2]);
-    const mid = data[1];
-    const result = data[2];
-    resolvers[mid](result);
-    delete resolvers[mid];
-});
-
-export function rnnPredict(s) {
-    id = (id + 1) % MAX_ID;
-    port.postMessage(['predict', id, s]);
-    return new Promise(resolve => resolvers[id] = resolve);
+const rnn = {
+    model: null
 }
 
-export function checkStatus() {
-    id = (id + 1) % MAX_ID;
-    port.postMessage(['loading-status', id, null]);
-    return new Promise(resolve => resolvers[id] = resolve);
+function tokenize(str_list) {
+    // convert chars to intgers
+    let result = [];
+    let largest = 0;
+    for (let i = 0; i < str_list.length; i++) {
+        result.push(str_list[i].split('').map((e) => {
+            return parseInt(config.stoi[e.toLowerCase()] || 0);
+        }));
+        largest = Math.max(largest, result[i].length);
+    }
+    if (largest === 0)
+        return null;
+    // now package into array
+    const buffer = tf.buffer([str_list.length, largest], 'int32');
+    for (let i = 0; i < str_list.length; i++)
+        for (let j = 0; j < result[i].length; j++)
+            buffer.set(result[i][j], i, j,);
+    return buffer.toTensor();
+}
+
+
+export async function rnnPredict(s) {
+    if (rnn.model === null) {
+        const model = await tf.loadLayersModel(config.url);
+        rnn.model = (t) => { return model.predict(t) };
+    }
+    const t = tokenize(s)
+    if (t) {
+        const result = rnn.model(t);
+        t.dispose();
+        const v = await result.array();
+        result.dispose();
+        return v;
+    }
+    return null;
 }

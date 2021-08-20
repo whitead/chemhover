@@ -3,7 +3,7 @@
  * all occurrences of each mapped word with its emoji counterpart.
  */
 
-import { checkStatus, rnnPredict } from "./lib/rnn";
+import { rnnPredict } from "./lib/rnn";
 
 
 const threshold = 1;
@@ -90,35 +90,10 @@ const observer = new MutationObserver((mutations) => {
 });
 
 
-var didbegin = false
-function begin() {
-    if (didbegin)
-        return;
-    didbegin = true;
-    replaceText(document.body);
-    //observer.observe(document.body, {
-    //   childList: true,
-    //   subtree: true
-    //});
-}
 
-var count = 0
-function doCheck() {
-    count += 1
-    console.log('checking');
-    if (count > 100) {
-        console.log('Could not load RNN model. Giving up');
-        return;
-    }
-    checkStatus().then((v) => {
-        console.log('got result ' + v);
-        if (!v) {
-            setTimeout(doCheck, 100);
-        } else {
-            console.log('starting');
-            begin();
-        }
-    });
-}
+replaceText(document.body);
+//observer.observe(document.body, {
+//   childList: true,
+//   subtree: true
+//});
 
-doCheck();
