@@ -116,25 +116,17 @@ async function replaceText(node) {
         let content = node.textContent;
         let newNode = node;
 
-        console.log('looking at node', node);
-
-        //console.log(content);
-
         const ss = content.split(/\s+/);
         if (ss.length > 0) {
             let smilesCount = 0;
             const ps = await rnnPredict(ss)
             if (ps) {
-                console.log(ss);
-                console.log(ps);
                 for (let i = 0; i < ss.length; i++) {
                     if (ss[i].length > 1 && ps[i] > threshold) {
-                        console.log('GOT SMILES');
                         content = content.replace(ss[i], makeChemElem(ss[i]));
                         smilesCount++;
                     }
                 }
-                console.log('Found some, going to replace!!');
                 // Now that all the replacements are done, perform the DOM manipulation.
                 newNode = insertHTMLText(node, content);
                 // now hook up stuff, only doing sparkle if parent is text area
@@ -153,8 +145,8 @@ async function replaceText(node) {
             }
         }
         for (let i = 0; i < node.childNodes.length; i++) {
-            setTimeout(closure(node.childNodes[i]), 0);
-            //replaceText(node.childNodes[i])
+            //setTimeout(closure(node.childNodes[i]), 0);
+            replaceText(node.childNodes[i])
         }
     }
 }
