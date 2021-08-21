@@ -3,13 +3,23 @@
  * all occurrences of each mapped word with its emoji counterpart.
  */
 
+console.log('CHECKING IF WE CAN RUN')
+
+if (_chemhover !== undefined) {
+    return
+}
+var _chemhover = true
+
+
 import { rnnPredict } from "./lib/rnn";
 import SmilesDrawer from 'smiles-drawer';
-import { model } from "@tensorflow/tfjs";
+// import browser from 'webextension-polyfill';
 
 const options = { width: '250', height: '200' };
 const smilesDrawer = new SmilesDrawer.Drawer(options);
 let CID = 0;
+
+console.log('STARTING NOW!!!');
 
 
 
@@ -150,7 +160,6 @@ async function replaceText(node) {
         }
     }
 }
-
 
 document.body.addEventListener("mouseup", (e) => {
     let srange;

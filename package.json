@@ -23,7 +23,8 @@
     "@parcel/config-webextension": "^2.0.0-nightly.2425",
     "@parcel/transformer-image": "^2.0.0-rc.0",
     "eslint": "^7.32.0",
-    "parcel": "^2.0.0-nightly.801"
+    "parcel": "^2.0.0-nightly.801",
+    "webextension-polyfill": "^0.8.0"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^3.8.0",

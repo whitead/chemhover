@@ -7,28 +7,24 @@
     "icons": {
         "48": "icons/icon.png"
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "<all_urls>"
-            ],
-            "js": [
-                "./replace.js"
-            ]
-        }
-    ],
     "background": {
         "scripts": [
-            "background.js"
+            "background.js",
+            "replace.js"
         ]
     },
     "browser_action": {
         "default_icon": {
-            "48": "icons/icon.png"
-        }
+            "48": "icons/icon-disable.png"
+        },
+        "default_title": "Enable chemhover"
     },
     "permissions": [
-        "*://raw.githubusercontent.com/*",
-        "webRequest"
+        "<all_urls>",
+        "webRequest",
+        "webNavigation",
+        "activeTab",
+        "storage",
+        "scripting"
     ]
 }
