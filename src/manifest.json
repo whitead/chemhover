@@ -24,7 +24,6 @@
         "webRequest",
         "webNavigation",
         "activeTab",
-        "storage",
-        "scripting"
+        "storage"
     ]
 }
