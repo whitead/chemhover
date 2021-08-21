@@ -13,7 +13,7 @@ Using ✨AI✨ to find SMILES and draw them. Just select some part or around the
 
 It actually runs a GRU RNN neural network over text to find SMILES (see `py/` for training/data info). This is overkill, but heh it's fun. Checkout [my book](https://whitead.github.io/dmol-book/) if you want to learn more!
 
-## Install (pre-alpha release)
+## Install (alpha release)
 
 *This is very new, so be ready to disable it. Also, come back for new releases*
 
