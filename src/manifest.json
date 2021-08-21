@@ -3,7 +3,7 @@
     "name": "Chemhover",
     "description": "Identifies SMILES and enables hover to see structure",
     "homepage_url": "https://github.com/whitead/chemhover",
-    "version": "1.0",
+    "version": "0.2",
     "icons": {
         "48": "icons/icon.png"
     },

@@ -1,9 +1,15 @@
 import browser from 'webextension-polyfill';
+import pjson from '../package.json'
+
+let version = pjson.version;
+let debugMode = version.endsWith('alpha');
 
 var config = {
     active: [],
     urlFilters: []
 }
+
+if (debugMode) console.log('Starting with version', version);
 
 /*
  * Updates the browserAction icon to reflect whether the current page
@@ -35,22 +41,22 @@ function checkUrl(u) {
 
 function doRun(tabId, changeinfo, tab) {
     if (checkUrl(tab.url)) {
-        console.log('Doing run on completed', tabId, tab.url);
+        if (debugMode) console.log('Doing run on completed', tabId, tab.url);
         config.active[tabId] = true;
         browser.tabs.executeScript({ file: 'replace.js' });
     } else {
         config.active[tabId] = false;
-        console.log('Not running on ', tab.url);
+        if (debugMode) console.log('Not running on ', tab.url);
     }
     updateIcon(config.active[tabId]);
 }
 
 function addURL(u) {
     let hostname = new URL(u).hostname;
-    console.log('ADDING NEW URL', hostname);
+    if (debugMode) console.log('Adding new URL', hostname);
     for (let i = 0; i < config.urlFilters.length; i++) {
         if (config.urlFilters[i].hostEquals === hostname) {
-            console.log('WAIT, it is already there!');
+            if (debugMode) console.log('Wait, it is already there!');
             return;
         }
     }
@@ -64,9 +70,9 @@ function addURL(u) {
 
 function removeURL(u) {
     let hostname = new URL(u).hostname;
-    console.log('REMOVING URL', hostname);
+    if (debugMode) console.log('Removing URL', hostname);
     config.urlFilters = config.urlFilters.filter((f) => f.hostEquals !== hostname)
-    console.log('new filters', config.urlFilters)
+    if (debugMode) console.log('new filters', config.urlFilters)
     browser.storage.sync.set({
         filters: config.urlFilters
     });
@@ -75,7 +81,7 @@ function removeURL(u) {
 browser.browserAction.onClicked.addListener(() => {
     browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
         let tab = tabs[0]; // Safe to assume there will only be one result
-        console.log('button pressed and we were', config.active[tab.tabId])
+        if (debugMode) console.log('button pressed and we were', config.active[tab.tabId])
         if (config.active[tab.tabId]) {
             config.active[tab.tabId] = false;
             removeURL(tab.url);
@@ -96,6 +102,6 @@ let storageItem =
             browser.storage.sync.set({
                 filters: []
             });
-        console.log('STARTING WITH THESE FILTERS', config.urlFilters);
+        if (debugMode) console.log('Starting with these', config.urlFilters);
         browser.tabs.onUpdated.addListener(doRun)
     });

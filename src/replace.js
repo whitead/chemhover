@@ -3,7 +3,13 @@
  * all occurrences of each mapped word with its emoji counterpart.
  */
 
-console.log('CHECKING IF WE CAN RUN')
+import pjson from '../package.json'
+
+let version = pjson.version;
+let debugMode = version.endsWith('alpha');
+
+
+if (debugMode) console.log('Checking if we can run')
 
 if (_chemhover !== undefined) {
     return
@@ -19,7 +25,7 @@ const options = { width: '250', height: '200' };
 const smilesDrawer = new SmilesDrawer.Drawer(options);
 let CID = 0;
 
-console.log('STARTING NOW!!!');
+if (debugMode) console.log('Yes, we can run!');
 
 
 

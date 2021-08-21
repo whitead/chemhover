@@ -2,12 +2,12 @@
 
 Using ✨AI✨ to find SMILES and draw them. Just select some part or around the SMILES string. *It does take a few seconds to start the AI.* Keep up on [Twitter](https://twitter.com/andrewwhite01) to learn more. See demo below.
 
+*You have to click the button to enable it to run on a URL. It remembers this (I hope) between sessions. The button should look like this when active: ✨*
+
 ## Known Issues
 
 * Its mouseclick listener can interfere with YouTube (fullscreen, home button)
 * The model loading can affect ability to select
-
-*So enable it, try it, and then disable it.* I'm working on more granular control on where/when it runs. 
 
 ## AI
 
@@ -17,7 +17,7 @@ It actually runs a GRU RNN neural network over text to find SMILES (see `py/` fo
 
 *This is very new, so be ready to disable it. Also, come back for new releases*
 
-1. Download the [release asset zip](https://github.com/whitead/chemhover/releases)
+1. Download the latest [release asset zip](https://github.com/whitead/chemhover/releases)
 2. Unzip it
 
 ### Chrome
