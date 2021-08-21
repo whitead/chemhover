@@ -1,12 +1,16 @@
 # ✨chemhover✨
 
-Using ✨AI✨ to find SMILES and draw them. Just select some part or around the SMILES string. Keep up on [Twitter](https://twitter.com/andrewwhite01) to learn more. See demo below.
+Using ✨AI✨ to find SMILES and draw them. Just select some part or around the SMILES string. *It does take a few seconds to start the AI.* Keep up on [Twitter](https://twitter.com/andrewwhite01) to learn more. See demo below.
+
+## AI
+
+It actually runs a GRU RNN neural network over text to find SMILES (see `py/` for training/data info). This is overkill, but heh it's fun. Checkout [my book](https://whitead.github.io/dmol-book/) if you want to learn more!
 
 ## Install (pre-alpha release)
 
 *This is very new, so be ready to disable it. Also, come back for new releases*
 
-1. Download the release zip
+1. Download the [release asset zip](https://github.com/whitead/chemhover/releases)
 2. Unzip it
 
 ### Chrome
