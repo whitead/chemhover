@@ -2,6 +2,13 @@
 
 Using ✨AI✨ to find SMILES and draw them. Just select some part or around the SMILES string. *It does take a few seconds to start the AI.* Keep up on [Twitter](https://twitter.com/andrewwhite01) to learn more. See demo below.
 
+## Known Issues
+
+* Its mouseclick listener can interfere with YouTube (fullscreen, home button)
+* The model loading can affect ability to select
+
+*So enable it, try it, and then disable it.* I'm working on more granular control on where/when it runs. 
+
 ## AI
 
 It actually runs a GRU RNN neural network over text to find SMILES (see `py/` for training/data info). This is overkill, but heh it's fun. Checkout [my book](https://whitead.github.io/dmol-book/) if you want to learn more!
