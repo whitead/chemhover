@@ -166,7 +166,7 @@ document.body.addEventListener("mouseup", (e) => {
         replaceText(srange.endContainer)
     }
 
-});
+}, true);
 
 //replaceText(document.body);
 

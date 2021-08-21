@@ -1,6 +1,6 @@
 # ✨chemhover✨
 
-Using ✨AI✨ to find SMILES and draw them. Just select on or around the SMILES string. Keep up on [Twitter](https://twitter.com/andrewwhite01) to learn more. See demo below. 
+Using ✨AI✨ to find SMILES and draw them. Just select some part or around the SMILES string. Keep up on [Twitter](https://twitter.com/andrewwhite01) to learn more. See demo below.
 
 ## Install (pre-alpha release)
 
