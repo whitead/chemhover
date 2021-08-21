@@ -160,9 +160,9 @@ document.body.addEventListener("mouseup", (e) => {
         srange = document.selection.createRange();
     }
 
-    if (srange.commonAncestorContainer)
-        replaceText(srange.commonAncestorContainer)
-    else if (srange.endContainer) {
+    if (srange.startContainer)
+        replaceText(srange.startContainer)
+    if (srange.endContainer) {
         replaceText(srange.endContainer)
     }
 
