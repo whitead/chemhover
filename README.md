@@ -33,4 +33,5 @@ In Firefox: Open the about:debugging page, click "This Firefox" (in newer versio
 
 ## Demo
 
-![chemhover2](https://user-images.githubusercontent.com/908389/130306740-f2040b54-123d-43b2-9094-c755d5349b00.gif)
+![chemhover3](https://user-images.githubusercontent.com/908389/130335994-45f015be-355b-45d3-9efa-9aa0b59d8409.gif)
+
