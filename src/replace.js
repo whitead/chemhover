@@ -24,11 +24,9 @@ import SmilesDrawer from 'smiles-drawer';
 const options = { width: '250', height: '200' };
 const smilesDrawer = new SmilesDrawer.Drawer(options);
 let CID = 0;
+const isolateRegex = /^[("'\[]*(.*?)[\."'\])]*$/gm;
 
 if (debugMode) console.log('Yes, we can run!');
-
-
-
 
 // Now monitor the DOM for additions and substitute emoji into new nodes.
 // @see https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver.
@@ -132,7 +130,14 @@ async function replaceText(node) {
         let content = node.textContent;
         let newNode = node;
 
-        const ss = content.split(/\s+/);
+        // split on whitespace and attempt to remove enclosing quotes/paranthesis
+        const ss = content.split(/\s+/).map((s) => {
+            let m = isolateRegex.exec(s);
+            if (m) {
+                s = m[1];
+            }
+            return s
+        });
         if (ss.length > 0) {
             let smilesCount = 0;
             const ps = await rnnPredict(ss)
@@ -143,10 +148,13 @@ async function replaceText(node) {
                         smilesCount++;
                     }
                 }
+                // don't sparkle on inputs
+                let doSparkle = node.parentNode.nodeName !== 'TEXTAREA';
+                console.log('determined', node.parentNode.nodeName, 'so', doSparkle);
                 // Now that all the replacements are done, perform the DOM manipulation.
                 newNode = insertHTMLText(node, content);
                 // now hook up stuff, only doing sparkle if parent is text area
-                hookup(smilesCount, newNode.parentNode.nodeName !== 'TEXTAREA');
+                hookup(smilesCount, doSparkle);
 
             }
         }
