@@ -58,7 +58,7 @@ const threshold = 1;
 
 function insertHTMLText(node, htmlText) {
     let replacementNode = document.createElement('span');
-    replacementNode.innerHTML = htmlText;
+    replacementNode.insertAdjacentHTML('beforeend', htmlText);
     node.parentNode.insertBefore(replacementNode, node);
     node.parentNode.removeChild(node);
     return replacementNode;
@@ -83,13 +83,13 @@ function makeChemElem(smiles) {
     modal.id = '_ch-modal' + CID;
     p.id = '_ch-p' + CID;
     CID += 1;
-    return p.outerHTML
+    return p.outerHTML;
 }
 
 function hookup(count, sparkle) {
     for (let i = CID - count; i < CID; i++) {
-        let p = document.getElementById('_ch-p' + i)
-        let modal = document.getElementById('_ch-modal' + i)
+        let p = document.getElementById('_ch-p' + i);
+        let modal = document.getElementById('_ch-modal' + i);
         drawSmiles(p.innerText, '_ch-canvas' + i, smilesDrawer, () => { modal.style.display = 'none'; });
         modal.onmouseout = function () {
             modal.style.display = 'none';
@@ -108,27 +108,17 @@ function hookup(count, sparkle) {
     }
 
 }
-
-/**
- * Substitutes emojis into text nodes.
- * If the node contains more than just text (ex: it has child nodes),
- * call replaceText() on each of its children.
- *
- * @param  {Node} node    - The target DOM Node.
- * @return {void}         - Note: the emoji substitution is done inline.
- */
 async function replaceText(node) {
     // Setting textContent on a node removes all of its children and replaces
     // them with a single text node. Since we don't want to alter the DOM aside
     // from substituting text, we only substitute on single text nodes.
     // @see https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
-    if (node.nodeType === Node.TEXT_NODE && node.parentNode && node.textContent.length > 2) {
+    if (node.nodeType === Node.TEXT_NODE && node.parentNode && node.textContent.length > 2 && !node.parentNode.id.startsWith('_ch')) {
         // Because DOM manipulation is slow, we don't want to keep setting
         // textContent after every replacement. Instead, manipulate a copy of
         // this string outside of the DOM and then perform the manipulation
         // once, at the end.
         let content = node.textContent;
-        let newNode = node;
 
         // split on whitespace and attempt to remove enclosing quotes/paranthesis
         const ss = content.split(/\s+/).map((s) => {
@@ -148,11 +138,13 @@ async function replaceText(node) {
                         smilesCount++;
                     }
                 }
-                // don't sparkle on inputs
+                if (!node.parentNode) {
+                    return; //not sure how this can happen - guess we can trigger replaceText twice.
+                }
+                // don't sparkle on inputs, but inputs never work anyway
                 let doSparkle = node.parentNode.nodeName !== 'TEXTAREA';
-                console.log('determined', node.parentNode.nodeName, 'so', doSparkle);
                 // Now that all the replacements are done, perform the DOM manipulation.
-                newNode = insertHTMLText(node, content);
+                insertHTMLText(node, content);
                 // now hook up stuff, only doing sparkle if parent is text area
                 hookup(smilesCount, doSparkle);
 

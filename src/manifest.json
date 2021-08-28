@@ -5,7 +5,7 @@
     "homepage_url": "https://github.com/whitead/chemhover",
     "version": "0.2",
     "icons": {
-        "48": "icons/icon.png"
+        "60": "icons/icon.png"
     },
     "background": {
         "scripts": [
@@ -15,7 +15,7 @@
     },
     "browser_action": {
         "default_icon": {
-            "48": "icons/icon-disable.png"
+            "60": "icons/icon-disable.png"
         },
         "default_title": "Enable chemhover"
     },

@@ -94,14 +94,14 @@ browser.browserAction.onClicked.addListener(() => {
     }, console.error);
 });
 
-let storageItem =
-    browser.storage.sync.get('filters').then((res) => {
-        if (Array.isArray(res))
-            config.urlFilters = res;
-        else
-            browser.storage.sync.set({
-                filters: []
-            });
-        if (debugMode) console.log('Starting with these', config.urlFilters);
-        browser.tabs.onUpdated.addListener(doRun)
-    });
+
+browser.storage.sync.get('filters').then((res) => {
+    if (Array.isArray(res))
+        config.urlFilters = res;
+    else
+        browser.storage.sync.set({
+            filters: []
+        });
+    if (debugMode) console.log('Starting with these', config.urlFilters);
+    browser.tabs.onUpdated.addListener(doRun)
+});
